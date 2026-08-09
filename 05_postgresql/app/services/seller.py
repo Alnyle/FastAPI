@@ -1,0 +1,27 @@
+from datetime import datetime, timedelta
+
+from sqlalchemy import select
+
+from api.schemas.seller import SellerCreate, SellerRead
+from database.models import Seller
+from sqlalchemy.ext.asyncio import AsyncSession
+from .user import UserService
+
+
+class SellerService(UserService):
+
+    # initialize the service with a database session
+    # in another when initialize hte SellerService class a session will be passed to it and it will be used to interact with the database
+    def __init__(self, session: AsyncSession):
+        super().__init__(Seller, session)
+
+
+
+    async def add(self, seller_create: SellerCreate) -> Seller:
+
+        return await self._add_user(seller_create.model_dump())
+
+
+    async def token(self, email, password) -> str:
+
+        return await self._generate_token(email, password)
